@@ -15,6 +15,24 @@ def getTime():
     t2 = ((Amax * (t1**2 / 2) - Amax * ((V2 - V1) / Amax)**2 / 2 - AB) / -V1) - t1
     t3 = (V2 - V1) / Amax + t2
 
+#loi_de_mouvement_S
+#Retourne la position x
+def loi_de_mouvement_S(t):
+    x = -1
+    if t >= t0 and t < t1:
+        x =  1/2 * (Amax * t) * t #Amax * t = sd(t)
+    elif t >= t1 and t < t2:
+        x = V1 * t
+    elif t >= t2 and t < t3:
+        x = -1/2 * (-Amax * t) * t #-Amax * t = sd(t)
+    elif t >= t3 and t < t4:
+        x = V2 * t
+    elif t >= t4 and t < t5:
+        x = -1/2 * -Amax * t #-Amax * t = sd(t)
+    return x
+     
+        
+
 #############################################################################
 # MAIN
 #############################################################################
