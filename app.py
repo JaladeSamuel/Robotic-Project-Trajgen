@@ -15,6 +15,16 @@ def getTime():
     t2 = ((Amax * (t1**2 / 2) - Amax * ((V2 - V1) / Amax)**2 / 2 - AB) / -V1) - t1
     t3 = (V2 - V1) / Amax + t2
 
+def loi_de_mouvement_ddS(t):
+    a = 0 
+    if t < t1:
+        a = Amax
+    elif t>t2 and t<t3:
+        a = -Amax
+    elif t>t4 and t<t5:
+        a = -Amax
+    return a
+
 #############################################################################
 # MAIN
 #############################################################################
