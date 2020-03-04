@@ -1,5 +1,7 @@
 import afficheCourbesTP
 import math
+import numpy as np
+import matplotlib.pyplot as plt
 
 A = (0, 0)
 B = (0, 10)
@@ -48,13 +50,13 @@ def loi_de_mouvement_dS(t):
     if t < t1:
         v = Amax * t
     elif t>=t1 and t<t2:
-        v = V1
+        v = V1 
     elif t>=t2 and t<t3:
-        v = -Amax*t
+        v = -Amax * (t-t2) + V1
     elif t>=t3 and t<t4:
         v = V2
     elif t>=t4 and t<t5:
-        v = -Amax*t
+        v = -Amax* (t-t4) + V2
     return v
 
 #loi_de_mouvement_S
@@ -85,13 +87,15 @@ def sampling(ts, tf, te):
     s = []
     ds = []
     dds = []
+    time = []
     
-    for t in range(ts, tf, te/1000):
-        s.append(loi_de_mouvement_S)
-        ds.append(loi_de_mouvement_dS)
-        dds.append(loi_de_mouvement_ddS)
+    for t in np.arange(ts, tf, te/1000):
+        s.append(loi_de_mouvement_S(t))
+        ds.append(loi_de_mouvement_dS(t))
+        dds.append(loi_de_mouvement_ddS(t))
+        time.append(t)
         
-    return s, ds, dds
+    return s, ds, dds, time
 
         
 
@@ -107,3 +111,6 @@ if __name__ == "__main__":
 
     print(AB, BC)
     print(t0, t1, t2, t3, t4, t5)
+    s, ds, dds, time = sampling(0., t5, 1.)
+    plt.plot(time, ds)
+    plt.show()
