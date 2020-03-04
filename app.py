@@ -75,7 +75,24 @@ def loi_de_mouvement_S(t):
     elif t >= t4 and t < t5:
         x = -1/2 *loi_de_mouvement_dS(t) #-Amax * t = ds(t)
     return x
-     
+
+#Echantillonnage 
+# INPUT : 
+#   ts : t départ
+#   tf : t final
+#   te : Periode d'echantillonnage en ms
+def sampling(ts, tf, te):
+    s = []
+    ds = []
+    dds = []
+    
+    for t in range(ts, tf, te/1000):
+        s.append(loi_de_mouvement_S)
+        ds.append(loi_de_mouvement_dS)
+        dds.append(loi_de_mouvement_ddS)
+        
+    return s, ds, dds
+
         
 
 #############################################################################
