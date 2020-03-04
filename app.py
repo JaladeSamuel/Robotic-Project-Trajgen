@@ -1,12 +1,12 @@
 import afficheCourbesTP
 import math
 
-A = (0, 0)
-B = (0, 10)
-C = (4, 10)
-V1 = 2
-V2 = 1
-Amax = 1
+A = (20, 15)
+B = (30, 50)
+C = (8, 12)
+V1 = 10
+V2 = 10
+Amax = 10
 Vmax = 10
 AB = BC = 0
 
