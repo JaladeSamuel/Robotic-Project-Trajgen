@@ -46,7 +46,7 @@ def affiche3courbes(numfig,nom,f,fd,fdd,t,tc):
     for x in tc:
         plt.axvline(x,color="g",linestyle="--")   
     
-    plt.show(block=False)
+    plt.show(block=True)
     
 #############################################################################
 # Affichage d'une courbe 2D d'abscisse t et d'ordonnée d(t)

@@ -1,4 +1,4 @@
-import afficheCourbesTP
+import afficheCourbesTP as ac
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -111,6 +111,12 @@ if __name__ == "__main__":
 
     print(AB, BC)
     print(t0, t1, t2, t3, t4, t5)
+   
     s, ds, dds, time = sampling(0., t5, 1.)
+   
+    '''plt.plot(time, dds)
     plt.plot(time, ds)
-    plt.show()
+    plt.plot(time, s)
+    plt.show()'''
+    
+    ac.affiche3courbes(1,"bonsoir",s,ds,dds,time,[t0, t1, t2, t3, t4, t5])
