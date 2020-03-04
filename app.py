@@ -25,6 +25,20 @@ def loi_de_mouvement_ddS(t):
         a = -Amax
     return a
 
+def loi_de_mouvement_dS(t):
+    v = 0 
+    if t < t1:
+        v = Amax * t
+    elif t>t1 and t<t2:
+        v = V1
+    elif t>t2 and t<t3:
+        v = -Amax*t
+    elif t>t3 and t<t4:
+        v = V2
+    elif t>t4 and t<t5:
+        v = -Amax*t
+    return v
+
 #############################################################################
 # MAIN
 #############################################################################
