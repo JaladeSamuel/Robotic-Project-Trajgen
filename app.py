@@ -65,18 +65,25 @@ def loi_de_mouvement_dS(t):
 #OUTPUT:
 #    x: position
 def loi_de_mouvement_S(t):
-    x = -1
-    if t >= t0 and t < t1:
-        x =  1/2 * loi_de_mouvement_dS(t) * t #Amax * t = ds(t)
-    elif t >= t1 and t < t2:
-        x = V1 * t
-    elif t >= t2 and t < t3:
-        x = -1/2 * loi_de_mouvement_dS(t) * t #-Amax * t = ds(t)
-    elif t >= t3 and t < t4:
-        x = V2 * t
-    elif t >= t4 and t < t5:
-        x = -1/2 *loi_de_mouvement_dS(t) #-Amax * t = ds(t)
-    return x
+    # x = -1
+    # if t >= t0 and t < t1:
+    #     x =  1/2 * loi_de_mouvement_dS(t) * t #Amax * t = ds(t)
+    # elif t >= t1 and t < t2:
+    #     x = V1 * t
+    # elif t >= t2 and t < t3:
+    #     x = -1/2 * loi_de_mouvement_dS(t) * t #-Amax * t = ds(t)
+    # elif t >= t3 and t < t4:
+    #     x = V2 * t
+    # elif t >= t4 and t < t5:
+    #     x = -1/2 *loi_de_mouvement_dS(t) #-Amax * t = ds(t)
+    # return x
+    
+    # TODO : utiliser cumsum pour aller plus vite 
+    integral = 0
+    for i in  np.arange(0., t, 0.1):
+        integral = integral + (loi_de_mouvement_dS(i) * 0.1)
+    
+    return integral
 
 #Echantillonnage 
 # INPUT : 
@@ -119,4 +126,4 @@ if __name__ == "__main__":
     plt.plot(time, s)
     plt.show()'''
     
-    ac.affiche3courbes(1,"bonsoir",s,ds,dds,time,[t0, t1, t2, t3, t4, t5])
+    ac.affiche3courbes(1, "bonsoir", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
