@@ -130,23 +130,23 @@ def d_trajectoire(s, t):
 
     return (x, y)
 
-def affichageTrajOp(S, X, dX, ddX):
+def affichageTrajOp(S, X, dX, ddX, label = 'x'):
     plt.figure()
         
     plt.subplot(311)
     plt.plot(S, X,"-", label="ligne -")
     plt.xlabel('Distance')
-    plt.ylabel('Valeur de x')
+    plt.ylabel('Valeur de ' + label)
     
     plt.subplot(312)
     plt.plot(S, dX,"-", label="ligne -")
     plt.xlabel('Distance')
-    plt.ylabel('Valeur de dx')
+    plt.ylabel('Valeur de d' + label)
     
     plt.subplot(313)
     plt.plot(S, ddX,"-", label="ligne -")
     plt.xlabel('Distance')
-    plt.ylabel('Valeur de ddx')
+    plt.ylabel('Valeur de dd' + label)
     
     plt.show()
 
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     S = []
     dS = []
     ddS = []
-    T = np.arange(0., t5, 1/500)
+    T = np.arange(0., t5, 1/1000)
     for t in T:
         s = loi_de_mouvement_S(t)
         S.append(s)
@@ -211,6 +211,7 @@ if __name__ == "__main__":
     # plt.gca().set_aspect('equal', adjustable='box')
     # plt.show()
 
-    affichageTrajOp(S, X, dX, ddX)
-
+    affichageTrajOp(S, X, dX, ddX, 'x')
+    affichageTrajOp(S, Y, dY, ddY, 'y')
     ac.affiche3courbes(2, "x", X, dX, ddX, T, [t0, t1, t2, t3, t4, t5])
+    ac.affiche3courbes(2, "y", Y, dY, ddY, T, [t0, t1, t2, t3, t4, t5])
