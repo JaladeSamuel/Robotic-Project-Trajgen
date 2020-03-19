@@ -130,6 +130,25 @@ def d_trajectoire(s, t):
 
     return (x, y)
 
+def affichageTrajOp(S, X, dX, ddX):
+    plt.figure()
+        
+    plt.subplot(311)
+    plt.plot(S, X,"-", label="ligne -")
+    plt.xlabel('Distance')
+    plt.ylabel('Valeur de x')
+    
+    plt.subplot(312)
+    plt.plot(S, dX,"-", label="ligne -")
+    plt.xlabel('Distance')
+    plt.ylabel('Valeur de dx')
+    
+    plt.subplot(313)
+    plt.plot(S, ddX,"-", label="ligne -")
+    plt.xlabel('Distance')
+    plt.ylabel('Valeur de ddx')
+    
+    plt.show()
 
 #############################################################################
 # MAIN
@@ -164,7 +183,7 @@ if __name__ == "__main__":
     S = []
     dS = []
     ddS = []
-    T = np.arange(0., t5, 1/100)
+    T = np.arange(0., t5, 1/500)
     for t in T:
         s = loi_de_mouvement_S(t)
         S.append(s)
@@ -177,11 +196,13 @@ if __name__ == "__main__":
         X.append(x)
         Y.append(y)
 
-        (dx, dy) = d_trajectoire(s, t)
+        (dx, dy) = d_trajectoire(ds, t)
         dX.append(dx)
         dY.append(dy)
-        ddX.append(dx)
-        ddY.append(dy)
+        
+        (ddx, ddy) = d_trajectoire(dds, t)
+        ddX.append(ddx)
+        ddY.append(ddy)
     
     # affichage des points (x,)
     # plt.figure(2)
@@ -190,8 +211,6 @@ if __name__ == "__main__":
     # plt.gca().set_aspect('equal', adjustable='box')
     # plt.show()
 
-    # ac.affiche_courbe2D(2, 'x', T, X, 'r', 'Temps')
+    affichageTrajOp(S, X, dX, ddX)
 
-    ac.affiche_courbe2D(3, 'x', S, X, 'r', 'Distance')
-    ac.affiche_courbe2D(4, 'x', S, dX, 'r', 'Vitesse')
-    ac.affiche_courbe2D(6, 'x', S, ddX, 'r', 'Acceleration')
+    ac.affiche3courbes(2, "x", X, dX, ddX, T, [t0, t1, t2, t3, t4, t5])
