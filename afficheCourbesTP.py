@@ -4,7 +4,7 @@ Created on Wed Feb 19 15:17:54 2020
 
 @author: taix
 """
-import matplotlib.pylab as plt;
+import matplotlib.pylab as plt
 import matplotlib.pyplot as pplt
 #############################################################################
 # Affichage de la fonction f(t) et de ses dérivées fd(t) et fdd(t) 

@@ -117,6 +117,19 @@ def trajectoire(s, t):
 
     return (x, y)
 
+def d_trajectoire(s, t):
+    AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
+    BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
+
+    if t <= t3:
+        x = s * (B[0] - A[0]) / AB
+        y = s * (B[1] - A[1]) / AB
+    else:
+        x = s * (C[0] - B[0]) / BC
+        y = s * (C[1] - B[1]) / BC
+
+    return (x, y)
+
 
 #############################################################################
 # MAIN
@@ -141,7 +154,13 @@ if __name__ == "__main__":
     ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
     
     X = []
+    dX = []
+    ddX = []
+
     Y = []
+    dY = []
+    ddY = []
+
     S = []
     dS = []
     ddS = []
@@ -158,6 +177,12 @@ if __name__ == "__main__":
         X.append(x)
         Y.append(y)
 
+        (dx, dy) = d_trajectoire(s, t)
+        dX.append(dx)
+        dY.append(dy)
+        ddX.append(dx)
+        ddY.append(dy)
+    
     # affichage des points (x,)
     # plt.figure(2)
     # plt.figure()
@@ -165,8 +190,8 @@ if __name__ == "__main__":
     # plt.gca().set_aspect('equal', adjustable='box')
     # plt.show()
 
-    ac.affiche_courbe2D(2, 'x', T, X, 'r', 'Temps')
+    # ac.affiche_courbe2D(2, 'x', T, X, 'r', 'Temps')
 
     ac.affiche_courbe2D(3, 'x', S, X, 'r', 'Distance')
-    ac.affiche_courbe2D(4, 'x', dS, X, 'r', 'Vitesse')
-    ac.affiche_courbe2D(6, 'x', ddS, X, 'r', 'Acceleration')
+    ac.affiche_courbe2D(4, 'x', S, dX, 'r', 'Vitesse')
+    ac.affiche_courbe2D(6, 'x', S, ddX, 'r', 'Acceleration')
