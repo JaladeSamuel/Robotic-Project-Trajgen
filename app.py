@@ -104,7 +104,19 @@ def sampling(ts, tf, te):
         
     return s, ds, dds, time
 
-        
+def trajectoire(s, t):
+    AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
+    BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
+
+    if t <= t3:
+        x = A[0] + s * (B[0] - A[0]) / AB
+        y = A[1] + s * (B[1] - A[1]) / AB
+    else:
+        x = B[0] + (s - AB) * (C[0] - B[0]) / BC
+        y = B[1] + (s - AB) * (C[1] - B[1]) / BC
+
+    return (x, y)
+
 
 #############################################################################
 # MAIN
@@ -127,3 +139,34 @@ if __name__ == "__main__":
     plt.show()'''
     
     ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
+    
+    X = []
+    Y = []
+    S = []
+    dS = []
+    ddS = []
+    T = np.arange(0., t5, 1/100)
+    for t in T:
+        s = loi_de_mouvement_S(t)
+        S.append(s)
+        ds = loi_de_mouvement_dS(t)
+        dS.append(ds)
+        dds = loi_de_mouvement_ddS(t)
+        ddS.append(dds)
+
+        (x, y) = trajectoire(s, t)
+        X.append(x)
+        Y.append(y)
+
+    # affichage des points (x,)
+    # plt.figure(2)
+    # plt.figure()
+    # plt.plot(X, Y)
+    # plt.gca().set_aspect('equal', adjustable='box')
+    # plt.show()
+
+    ac.affiche_courbe2D(2, 'x', T, X, 'r', 'Temps')
+
+    ac.affiche_courbe2D(3, 'x', S, X, 'r', 'Distance')
+    ac.affiche_courbe2D(4, 'x', dS, X, 'r', 'Vitesse')
+    ac.affiche_courbe2D(6, 'x', ddS, X, 'r', 'Acceleration')

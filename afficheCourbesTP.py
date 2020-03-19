@@ -59,11 +59,11 @@ def affiche3courbes(numfig,nom,f,fd,fdd,t,tc):
 #
 #    ATTENTION: il faut que les dimensions de d et t soient identiques
 #############################################################################  
-def affiche_courbe2D(numfig,nom,t,d,coul):
+def affiche_courbe2D(numfig,nom,t,d,coul,xLabel):
     plt.figure(numfig)
     plt.plot(t, d,"o-", label="ligne -",color=coul)
-    plt.xlabel('Temps')
+    plt.xlabel(xLabel)
     plt.ylabel('Valeur de ' + nom)
     plt.title('Affichage de la courbe ' + nom)
-    plt.show(block=False) # affiche la figure a l'ecran
+    plt.show(block=True) # affiche la figure a l'ecran
     
