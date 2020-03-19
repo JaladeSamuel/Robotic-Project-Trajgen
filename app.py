@@ -126,4 +126,4 @@ if __name__ == "__main__":
     plt.plot(time, s)
     plt.show()'''
     
-    ac.affiche3courbes(1, "bonsoir", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
+    ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
