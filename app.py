@@ -3,15 +3,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-A = (0, 0)
-B = (0, 10)
-C = (4, 10)
-V1 = 2
-V2 = 1
-Amax = 1
-AB = BC = 0
-
-def getTime():
+def getTime(V1, V2, Amax):
     t0 = 0
     
     delta_t0_t1 = V1 / Amax
@@ -33,20 +25,25 @@ def getTime():
     t4 = t3 + delta_t3_t4
     t5 = t4 + delta_t4_t5
 
-    return (t0, t1, t2, t3, t4, t5)
+    return [t0, t1, t2, t3, t4, t5]
 
-def loi_de_mouvement_ddS(t):
-    a = 0 
+def loi_de_mouvement_ddS(t, ti):
+    (_, t1, t2, t3, t4, t5) = ti
+    a = 0
+    
     if t < t1:
         a = Amax
-    elif t>=t2 and t<t3:
+    elif t >= t2 and t < t3:
         a = -Amax
-    elif t>=t4 and t<t5:
+    elif t >= t4 and t < t5:
         a = -Amax
+    
     return a
 
-def loi_de_mouvement_dS(t):
-    v = 0 
+def loi_de_mouvement_dS(t, ti):
+    (_, t1, t2, t3, t4, t5) = ti
+    v = 0
+
     if t < t1:
         v = Amax * t
     elif t>=t1 and t<t2:
@@ -57,6 +54,7 @@ def loi_de_mouvement_dS(t):
         v = V2
     elif t>=t4 and t<t5:
         v = -Amax* (t-t4) + V2
+    
     return v
 
 #loi_de_mouvement_S
@@ -64,7 +62,8 @@ def loi_de_mouvement_dS(t):
 #    t: temps
 #OUTPUT:
 #    x: position
-def loi_de_mouvement_S(t):
+def loi_de_mouvement_S(t, ti):
+    # TODO : préciser dans le compte rendu ce qu'on a pas réussi 
     # x = -1
     # if t >= t0 and t < t1:
     #     x =  1/2 * loi_de_mouvement_dS(t) * t #Amax * t = ds(t)
@@ -81,7 +80,7 @@ def loi_de_mouvement_S(t):
     # TODO : utiliser cumsum pour aller plus vite 
     integral = 0
     for i in  np.arange(0., t, 0.1):
-        integral = integral + (loi_de_mouvement_dS(i) * 0.1)
+        integral = integral + (loi_de_mouvement_dS(i, ti) * 0.1)
     
     return integral
 
@@ -90,21 +89,21 @@ def loi_de_mouvement_S(t):
 #   ts : t départ
 #   tf : t final
 #   te : Periode d'echantillonnage en ms
-def sampling(ts, tf, te):
+def sampling(ts, tf, te, ti):
     s = []
     ds = []
     dds = []
     time = []
     
     for t in np.arange(ts, tf, te/1000):
-        s.append(loi_de_mouvement_S(t))
-        ds.append(loi_de_mouvement_dS(t))
-        dds.append(loi_de_mouvement_ddS(t))
+        s.append(loi_de_mouvement_S(t, ti))
+        ds.append(loi_de_mouvement_dS(t, ti))
+        dds.append(loi_de_mouvement_ddS(t, ti))
         time.append(t)
-        
+    
     return s, ds, dds, time
 
-def trajectoire(s, t):
+def trajectoire(A, B, C, s, t):
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
 
@@ -117,7 +116,7 @@ def trajectoire(s, t):
 
     return (x, y)
 
-def d_trajectoire(s, t):
+def d_trajectoire(A, B, C, s, t):
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
 
@@ -132,7 +131,7 @@ def d_trajectoire(s, t):
 
 def affichageTrajOp(S, X, dX, ddX, label = 'x'):
     plt.figure()
-        
+    
     plt.subplot(311)
     plt.plot(S, X,"-", label="ligne -")
     plt.xlabel('Distance')
@@ -150,28 +149,10 @@ def affichageTrajOp(S, X, dX, ddX, label = 'x'):
     
     plt.show()
 
-#############################################################################
-# MAIN
-#############################################################################
-if __name__ == "__main__":
-    print("START")
-    
-    AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
-    BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
-    (t0, t1, t2, t3, t4, t5) = getTime()
+def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
+    (t0, t1, t2, t3, t4, t5) = getTime(V1, V2, Amax)
+    ti = [t0, t1, t2, t3, t4, t5]
 
-    print(AB, BC)
-    print(t0, t1, t2, t3, t4, t5)
-   
-    s, ds, dds, time = sampling(0., t5, 1.)
-   
-    '''plt.plot(time, dds)
-    plt.plot(time, ds)
-    plt.plot(time, s)
-    plt.show()'''
-    
-    ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
-    
     X = []
     dX = []
     ddX = []
@@ -185,33 +166,66 @@ if __name__ == "__main__":
     ddS = []
     T = np.arange(0., t5, 1/1000)
     for t in T:
-        s = loi_de_mouvement_S(t)
+        s = loi_de_mouvement_S(t, ti)
         S.append(s)
-        ds = loi_de_mouvement_dS(t)
+        ds = loi_de_mouvement_dS(t, ti)
         dS.append(ds)
-        dds = loi_de_mouvement_ddS(t)
+        dds = loi_de_mouvement_ddS(t, ti)
         ddS.append(dds)
 
-        (x, y) = trajectoire(s, t)
+        (x, y) = trajectoire(A, B, C, s, t)
         X.append(x)
         Y.append(y)
 
-        (dx, dy) = d_trajectoire(ds, t)
+        (dx, dy) = d_trajectoire(A, B, C, ds, t)
         dX.append(dx)
         dY.append(dy)
         
-        (ddx, ddy) = d_trajectoire(dds, t)
+        (ddx, ddy) = d_trajectoire(A, B, C, dds, t)
         ddX.append(ddx)
         ddY.append(ddy)
     
-    # affichage des points (x,)
-    # plt.figure(2)
-    # plt.figure()
-    # plt.plot(X, Y)
-    # plt.gca().set_aspect('equal', adjustable='box')
-    # plt.show()
+    return (S, dS, ddS, X, dX, ddX, Y, dY, ddY)
 
+#############################################################################
+# MAIN
+#############################################################################
+if __name__ == "__main__":
+    A = (0, 0)
+    B = (0, 10)
+    C = (0, 14)
+    V1 = 2
+    V2 = 1
+    Vmax = 2
+    Amax = 1
+    
+    AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
+    BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
+    ti = getTime(V1, V2, Amax)
+    (t0, t1, t2, t3, t4, t5) = ti
+    T = np.arange(0., t5, 1/1000)
+
+    print("AB :", AB)
+    print("BC :", BC)
+    print("ti :", t0, t1, t2, t3, t4, t5)
+   
+    s, ds, dds, time = sampling(0., t5, 1., ti)
+   
+    ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
+    
+    (S, dS, ddS, X, dX, ddX, Y, dY, ddY) = trajrecouvre(A, B, C, V1, V2, Vmax, Amax)
+    
     affichageTrajOp(S, X, dX, ddX, 'x')
     affichageTrajOp(S, Y, dY, ddY, 'y')
     ac.affiche3courbes(2, "x", X, dX, ddX, T, [t0, t1, t2, t3, t4, t5])
     ac.affiche3courbes(2, "y", Y, dY, ddY, T, [t0, t1, t2, t3, t4, t5])
+
+    # vitesse point O4, pour faire une vérification
+    vitO4 = []
+    for i in range(len(dX)):
+        vit = math.sqrt(dX[i]**2 + dY[i]*2)
+        vitO4.append(vit)
+    
+    plt.figure()
+    plt.plot(T, vitO4)
+    plt.show()
