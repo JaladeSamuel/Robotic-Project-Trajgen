@@ -198,15 +198,22 @@ def mgd(q):
     y = l * math.sin(q1 + q3) + math.cos(q1) * q2
     theta = q1 + q3
 
-    return x, y, theta
+    return round(x, 5), round(y, 5), round(theta, 5)
 
 def mgi(x, y, theta):
+    epsilon = 1
+    s1 = epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
+    c1 = -epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
+    q1_plus = math.atan2(s1, c1)
+    q2_plus = -s1 * x + c1 * y
+    
     epsilon = -1
     s1 = epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
     c1 = -epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
-    q1 = math.atan2(s1, c1)
+    q1_minus = math.atan2(s1, c1)
+    q2_minus = -s1 * x + c1 * y
 
-    return q1
+    return (round(q1_plus, 5), round(q1_minus, 5)), (round(q2_plus, 5), round(q2_minus, 5))
 
 #############################################################################
 # MAIN
@@ -251,14 +258,16 @@ if __name__ == "__main__":
     # plt.plot(T, vitO4)
     # plt.show()
 
-    q1 = 0
-    q2 = 3
+    q1 = math.pi / 2
+    q2 = 2
     q3 = math.pi / 2
     q = [q1, q2, q3]
-    print("q1 :", q1, "| q2 :", q2, "| q3 :", q3)
+    print("Configuration : q = [", q1, ",", q2, ",", q3, "]")
 
     x, y, theta = mgd(q)
-    print("x :", x, "| y :", y, "| theta :", theta)
+    print("MGD ==> X = [", x, ",", y, ",", theta, "]")
 
-    q1 = mgi(x, y, theta)
-    print(q1)
+    (q1_plus, q1_minus), (q2_plus, q2_minus) = mgi(x, y, theta)
+    print("MGI ==> 2 solutions : ")
+    print("  - epsilon = +1 : q = [", q1_plus, ",", q2_plus, ",", "]")
+    print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", "]")
