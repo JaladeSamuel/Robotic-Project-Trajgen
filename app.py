@@ -3,7 +3,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-def getTime(V1, V2, Amax):
+def getTime(V1, V2, AB, BC, Amax):
     t0 = 0
     
     delta_t0_t1 = V1 / Amax
@@ -27,7 +27,7 @@ def getTime(V1, V2, Amax):
 
     return [t0, t1, t2, t3, t4, t5]
 
-def loi_de_mouvement_ddS(t, ti):
+def loi_de_mouvement_ddS(t, ti, Amax):
     (_, t1, t2, t3, t4, t5) = ti
     a = 0
     
@@ -40,19 +40,19 @@ def loi_de_mouvement_ddS(t, ti):
     
     return a
 
-def loi_de_mouvement_dS(t, ti):
+def loi_de_mouvement_dS(t, ti, Amax, V1, V2):
     (_, t1, t2, t3, t4, t5) = ti
     v = 0
 
     if t < t1:
         v = Amax * t
-    elif t>=t1 and t<t2:
+    elif t >= t1 and t<t2:
         v = V1 
-    elif t>=t2 and t<t3:
+    elif t >= t2 and t<t3:
         v = -Amax * (t-t2) + V1
-    elif t>=t3 and t<t4:
+    elif t >= t3 and t<t4:
         v = V2
-    elif t>=t4 and t<t5:
+    elif t >= t4 and t<t5:
         v = -Amax* (t-t4) + V2
     
     return v
@@ -62,7 +62,7 @@ def loi_de_mouvement_dS(t, ti):
 #    t: temps
 #OUTPUT:
 #    x: position
-def loi_de_mouvement_S(t, ti):
+def loi_de_mouvement_S(t, ti, Amax):
     # TODO : préciser dans le compte rendu ce qu'on a pas réussi 
     # x = -1
     # if t >= t0 and t < t1:
@@ -80,7 +80,7 @@ def loi_de_mouvement_S(t, ti):
     # TODO : utiliser cumsum pour aller plus vite 
     integral = 0
     for i in  np.arange(0., t, 0.1):
-        integral = integral + (loi_de_mouvement_dS(i, ti) * 0.1)
+        integral = integral + (loi_de_mouvement_dS(i, ti, Amax, V1, V2) * 0.1)
     
     return integral
 
@@ -96,16 +96,17 @@ def sampling(ts, tf, te, ti):
     time = []
     
     for t in np.arange(ts, tf, te/1000):
-        s.append(loi_de_mouvement_S(t, ti))
-        ds.append(loi_de_mouvement_dS(t, ti))
-        dds.append(loi_de_mouvement_ddS(t, ti))
+        s.append(loi_de_mouvement_S(t, ti, Amax))
+        ds.append(loi_de_mouvement_dS(t, ti, Amax, V1, V2))
+        dds.append(loi_de_mouvement_ddS(t, ti, Amax))
         time.append(t)
     
     return s, ds, dds, time
 
-def trajectoire(A, B, C, s, t):
+def trajectoire(A, B, C, s, t, ti):
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
+    (_, _, _, t3, _, _) = ti
 
     if t <= t3:
         x = A[0] + s * (B[0] - A[0]) / AB
@@ -150,7 +151,9 @@ def affichageTrajOp(S, X, dX, ddX, label = 'x'):
     plt.show()
 
 def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
-    (t0, t1, t2, t3, t4, t5) = getTime(V1, V2, Amax)
+    AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
+    BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
+    (t0, t1, t2, t3, t4, t5) = getTime(V1, V2, AB, BC, Amax)
     ti = [t0, t1, t2, t3, t4, t5]
 
     X = []
@@ -166,14 +169,14 @@ def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
     ddS = []
     T = np.arange(0., t5, 1/1000)
     for t in T:
-        s = loi_de_mouvement_S(t, ti)
+        s = loi_de_mouvement_S(t, ti, Amax)
         S.append(s)
-        ds = loi_de_mouvement_dS(t, ti)
+        ds = loi_de_mouvement_dS(t, ti, Amax, V1, V2)
         dS.append(ds)
-        dds = loi_de_mouvement_ddS(t, ti)
+        dds = loi_de_mouvement_ddS(t, ti, Amax)
         ddS.append(dds)
 
-        (x, y) = trajectoire(A, B, C, s, t)
+        (x, y) = trajectoire(A, B, C, s, t, ti)
         X.append(x)
         Y.append(y)
 
@@ -187,7 +190,8 @@ def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
     
     return (S, dS, ddS, X, dX, ddX, Y, dY, ddY)
 
-def mgd(q1, q2, q3):
+def mgd(q):
+    (q1, q2, q3) = q
     l = 1
     x = l * math.cos(q1 + q3) - math.sin(q1) * q2
     y = l * math.sin(q1 + q3) + math.cos(q1) * q2
@@ -209,7 +213,7 @@ if __name__ == "__main__":
     
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
-    ti = getTime(V1, V2, Amax)
+    ti = getTime(V1, V2, AB, BC, Amax)
     (t0, t1, t2, t3, t4, t5) = ti
     T = np.arange(0., t5, 1/1000)
 
@@ -241,5 +245,6 @@ if __name__ == "__main__":
     q1 = math.pi / 4
     q2 = 1
     q3 = math.pi / 4
-    x, y, theta = mgd(q1, q2, q3)
+    q = [q1, q2, q3]
+    x, y, theta = mgd(q)
     print("x :", x, "| y :", y, "| theta :", theta)
