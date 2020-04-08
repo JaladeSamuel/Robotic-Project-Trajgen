@@ -62,7 +62,7 @@ def loi_de_mouvement_dS(t, ti, Amax, V1, V2):
 #    t: temps
 #OUTPUT:
 #    x: position
-def loi_de_mouvement_S(t, ti, Amax):
+def loi_de_mouvement_S(t, ti, Amax, V1, V2):
     # TODO : préciser dans le compte rendu ce qu'on a pas réussi 
     # x = -1
     # if t >= t0 and t < t1:
@@ -89,14 +89,14 @@ def loi_de_mouvement_S(t, ti, Amax):
 #   ts : t départ
 #   tf : t final
 #   te : Periode d'echantillonnage en ms
-def sampling(ts, tf, te, ti):
+def sampling(ts, tf, te, ti, Amax, V1, V2):
     s = []
     ds = []
     dds = []
     time = []
     
     for t in np.arange(ts, tf, te/1000):
-        s.append(loi_de_mouvement_S(t, ti, Amax))
+        s.append(loi_de_mouvement_S(t, ti, Amax, V1, V2))
         ds.append(loi_de_mouvement_dS(t, ti, Amax, V1, V2))
         dds.append(loi_de_mouvement_ddS(t, ti, Amax))
         time.append(t)
@@ -117,9 +117,10 @@ def trajectoire(A, B, C, s, t, ti):
 
     return (x, y)
 
-def d_trajectoire(A, B, C, s, t):
+def d_trajectoire(A, B, C, s, t, ti):
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
+    (_, _, _, t3, _, _) = ti
 
     if t <= t3:
         x = s * (B[0] - A[0]) / AB
@@ -169,7 +170,7 @@ def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
     ddS = []
     T = np.arange(0., t5, 1/1000)
     for t in T:
-        s = loi_de_mouvement_S(t, ti, Amax)
+        s = loi_de_mouvement_S(t, ti, Amax, V1, V2)
         S.append(s)
         ds = loi_de_mouvement_dS(t, ti, Amax, V1, V2)
         dS.append(ds)
@@ -180,11 +181,11 @@ def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
         X.append(x)
         Y.append(y)
 
-        (dx, dy) = d_trajectoire(A, B, C, ds, t)
+        (dx, dy) = d_trajectoire(A, B, C, ds, t, ti)
         dX.append(dx)
         dY.append(dy)
         
-        (ddx, ddy) = d_trajectoire(A, B, C, dds, t)
+        (ddx, ddy) = d_trajectoire(A, B, C, dds, t, ti)
         ddX.append(ddx)
         ddY.append(ddy)
     
@@ -221,7 +222,7 @@ if __name__ == "__main__":
     print("BC :", BC)
     print("ti :", t0, t1, t2, t3, t4, t5)
    
-    s, ds, dds, time = sampling(0., t5, 1., ti)
+    s, ds, dds, time = sampling(0., t5, 1., ti, Amax, V1, V2)
    
     ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
     
