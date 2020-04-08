@@ -255,6 +255,8 @@ if __name__ == "__main__":
     q2 = 3
     q3 = math.pi / 2
     q = [q1, q2, q3]
+    print("q1 :", q1, "| q2 :", q2, "| q3 :", q3)
+
     x, y, theta = mgd(q)
     print("x :", x, "| y :", y, "| theta :", theta)
 
