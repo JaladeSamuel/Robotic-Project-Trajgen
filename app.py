@@ -202,18 +202,36 @@ def mgd(q):
 
 def mgi(x, y, theta):
     epsilon = 1
-    s1 = epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
-    c1 = -epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
-    q1_plus = math.atan2(s1, c1)
-    q2_plus = -s1 * x + c1 * y
-    
-    epsilon = -1
-    s1 = epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
-    c1 = -epsilon * x * math.sqrt(x**2 + y**2) / (x**2 + y**2)
-    q1_minus = math.atan2(s1, c1)
-    q2_minus = -s1 * x + c1 * y
+    l = 1
 
-    return (round(q1_plus, 5), round(q1_minus, 5)), (round(q2_plus, 5), round(q2_minus, 5))
+    t14 = x - l * math.cos(theta)
+    t24 = y - l * math.sin(theta)
+    t11 = math.cos(theta)
+    t21 = math.sin(theta)
+
+    s1 = epsilon * t14 * math.sqrt(t14**2 + t24**2) / (t14**2 + t24**2)
+    c1 = -epsilon * t24 * math.sqrt(t14**2 + t24**2) / (t14**2 + t24**2)
+
+    q1_plus = math.atan2(s1, c1)
+    q2_plus = -s1 * t14 + c1 * t24
+    
+    s3 = -s1 * t11 + c1 * t21
+    c3 = c1 * t11 + s1 * t21
+    q3_plus = math.atan2(s3, c3)
+
+    epsilon = -1
+
+    s1 = epsilon * t14 * math.sqrt(t14**2 + t24**2) / (t14**2 + t24**2)
+    c1 = -epsilon * t24 * math.sqrt(t14**2 + t24**2) / (t14**2 + t24**2)
+
+    q1_minus = math.atan2(s1, c1)
+    q2_minus = -s1 * t14 + c1 * t24
+
+    s3 = -s1 * t11 + c1 * t21
+    c3 = c1 * t11 + s1 * t21
+    q3_minus = math.atan2(s3, c3)
+
+    return (round(q1_plus, 5), round(q1_minus, 5)), (round(q2_plus, 5), round(q2_minus, 5)), (round(q3_plus, 5), round(q3_minus, 5))
 
 #############################################################################
 # MAIN
@@ -258,7 +276,7 @@ if __name__ == "__main__":
     # plt.plot(T, vitO4)
     # plt.show()
 
-    q1 = math.pi / 2
+    q1 = 0
     q2 = 2
     q3 = math.pi / 2
     q = [q1, q2, q3]
@@ -267,7 +285,7 @@ if __name__ == "__main__":
     x, y, theta = mgd(q)
     print("MGD ==> X = [", x, ",", y, ",", theta, "]")
 
-    (q1_plus, q1_minus), (q2_plus, q2_minus) = mgi(x, y, theta)
+    (q1_plus, q1_minus), (q2_plus, q2_minus), (q3_plus, q3_minus) = mgi(x, y, theta)
     print("MGI ==> 2 solutions : ")
-    print("  - epsilon = +1 : q = [", q1_plus, ",", q2_plus, ",", "]")
-    print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", "]")
+    print("  - epsilon = +1 : q = [", q1_plus, ",", q2_plus, ",", q3_plus, "]")
+    print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", q3_minus, "]")
