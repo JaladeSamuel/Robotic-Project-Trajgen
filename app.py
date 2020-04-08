@@ -187,6 +187,14 @@ def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
     
     return (S, dS, ddS, X, dX, ddX, Y, dY, ddY)
 
+def mgd(q1, q2, q3):
+    l = 1
+    x = l * math.cos(q1 + q3) - math.sin(q1) * q2
+    y = l * math.sin(q1 + q3) + math.cos(q1) * q2
+    theta = q1 + q3
+
+    return x, y, theta
+
 #############################################################################
 # MAIN
 #############################################################################
@@ -229,3 +237,9 @@ if __name__ == "__main__":
     plt.figure()
     plt.plot(T, vitO4)
     plt.show()
+
+    q1 = math.pi / 4
+    q2 = 1
+    q3 = math.pi / 4
+    x, y, theta = mgd(q1, q2, q3)
+    print("x :", x, "| y :", y, "| theta :", theta)
