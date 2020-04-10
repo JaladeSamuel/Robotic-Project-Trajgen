@@ -194,6 +194,11 @@ def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
 def mgd(q):
     (q1, q2, q3) = q
     l = 1
+
+    # gestion de singularité
+    if q2 == 0:
+        q2 = 0.001
+
     x = l * math.cos(q1 + q3) - math.sin(q1) * q2
     y = l * math.sin(q1 + q3) + math.cos(q1) * q2
     theta = q1 + q3
@@ -206,6 +211,11 @@ def mgi(x, y, theta):
 
     t14 = x - l * math.cos(theta)
     t24 = y - l * math.sin(theta)
+
+    # gestion de singularité
+    if t14 == t24:
+        raise ZeroDivisionError
+
     t11 = math.cos(theta)
     t21 = math.sin(theta)
 
@@ -232,6 +242,17 @@ def mgi(x, y, theta):
     q3_minus = math.atan2(s3, c3)
 
     return (round(q1_plus, 5), round(q1_minus, 5)), (round(q2_plus, 5), round(q2_minus, 5)), (round(q3_plus, 5), round(q3_minus, 5))
+
+def mdd(q, dq):
+    (q1, q2, q3) = q
+    (dq1, dq2, dq3) = dq
+    l = 1
+
+    dx = (-l * math.sin(q1 + q3) - q2) * dq1 - math.sin(dq2) + (-l * math.sin(q1 + q3)) * dq3
+    dy = 0
+    dz = 0
+
+    return dx, dy, dz
 
 #############################################################################
 # MAIN
@@ -276,8 +297,8 @@ if __name__ == "__main__":
     # plt.plot(T, vitO4)
     # plt.show()
 
-    q1 = 0
-    q2 = 2
+    q1 = math.pi / 4
+    q2 = 0
     q3 = math.pi / 2
     q = [q1, q2, q3]
     print("Configuration : q = [", q1, ",", q2, ",", q3, "]")
