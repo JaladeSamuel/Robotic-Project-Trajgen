@@ -249,10 +249,10 @@ def mdd(q, dq):
     l = 1
 
     dx = (-l * math.sin(q1 + q3) - q2) * dq1 - math.sin(dq2) + (-l * math.sin(q1 + q3)) * dq3
-    dy = 0
-    dz = 0
+    dy = (l * math.cos(q1 + q3) - q2 * math.sin(q2)) * dq1 + math.cos(q1) * dq2 + (l * math.cos(q1 +q3)) * dq3
+    dtheta = dq1 + dq3
 
-    return dx, dy, dz
+    return dx, dy, dtheta
 
 #############################################################################
 # MAIN
@@ -297,8 +297,8 @@ if __name__ == "__main__":
     # plt.plot(T, vitO4)
     # plt.show()
 
-    q1 = math.pi / 4
-    q2 = 0
+    q1 = 0
+    q2 = 2
     q3 = math.pi / 2
     q = [q1, q2, q3]
     print("Configuration : q = [", q1, ",", q2, ",", q3, "]")
@@ -309,4 +309,15 @@ if __name__ == "__main__":
     (q1_plus, q1_minus), (q2_plus, q2_minus), (q3_plus, q3_minus) = mgi(x, y, theta)
     print("MGI ==> 2 solutions : ")
     print("  - epsilon = +1 : q = [", q1_plus, ",", q2_plus, ",", q3_plus, "]")
-    print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", q3_minus, "]")
+    print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", q3_minus, "]") 
+
+    dq1 = 1
+    dq2 = 0
+    dq3 = 0
+    dq = [dq1, dq2, dq3]
+    dx, dy, dtheta = mdd(q, dq)
+    print("MDD ==> dX = [", dx, ",", dy, ",", dtheta, "]")
+
+
+
+    
