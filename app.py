@@ -302,15 +302,15 @@ def mdi(q, dx, dy, dtheta):
     (q1, q2, q3) = q
     l = 1
 
-    dq1 = (-math.cos(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dx + \
-            (-math.sin(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dy + \
-            ((l * math.cos(q1 + q3) * math.sin(q1) - l * math.sin(q1 + q3) * math.cos(q1)) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dtheta
-    dq2 = (-math.sin(q2) / (math.cos(q1)**2 + math.sin(q1) * math.sin(q2))) * dx + \
-            (math.cos(q1) / (math.cos(q1)**2 + math.sin(q1) * math.sin(q2))) * dy + \
-            (-(l * math.cos(q1 + q3) * math.cos(q1) + l * math.sin(q1 + q3) * math.sin(q2)) / (math.cos(q1)**2 + math.sin(q1) * math.sin(q2))) * dtheta
-    dq3 = (math.cos(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dx + \
-            (math.sin(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dy + \
-            ((q2 * math.cos(q1)**2 + l * math.sin(q1 + q3) * math.cos(q1) - l * math.cos(q1 + q3) * math.sin(q1) + q2 * math.sin(q1) * math.sin(q2)) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dtheta
+    dq1 = ((-math.cos(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1)**2)) * dx + \
+            (-math.sin(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1)**2)) * dy + \
+            ((l * math.cos(q1 + q3) * math.sin(q1) - l * math.sin(q1 + q3) * math.cos(q1)) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1)**2)) * dtheta
+    dq2 = (-math.sin(q1) / (math.cos(q1)**2 + math.sin(q1)**2)) * dx + \
+            (math.cos(q1) / (math.cos(q1)**2 + math.sin(q1)**2)) * dy + \
+            (-(l * math.cos(q1 + q3) * math.cos(q1) + l * math.sin(q1 + q3) * math.sin(q1)) / (math.cos(q1)**2 + math.sin(q1)**2)) * dtheta
+    dq3 = (math.cos(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1)**2) * dx + \
+            (math.sin(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1)**2)) * dy + \
+            ((q2 * math.cos(q1)**2 + l * math.sin(q1 + q3) * math.cos(q1) + q2 * math.sin(q1)**2 - l * math.cos(q1 + q3) * math.sin(q1)) / (q2 * cos(q1)**2 + q2 * math.sin(q1)**2)) * dtheta
 
     return dq1, dq2, dq3
 
