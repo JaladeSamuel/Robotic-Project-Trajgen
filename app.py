@@ -291,7 +291,7 @@ def mdd(q, dq):
     dy = (l * math.cos(q1 + q3) - q2 * math.sin(q1)) * dq1 + math.cos(q1) * dq2 + (l * math.cos(q1 +q3)) * dq3
     dtheta = dq1 + dq3
 
-    return dx, dy, dtheta
+    return round(dx, 5), round(dy, 5), round(dtheta, 5)
 
 #Modele dynamique inverse
 # INPUT : 
@@ -312,7 +312,7 @@ def mdi(q, dx, dy, dtheta):
           (math.sin(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1)**2)) * dy + \
           ((q2 * math.cos(q1)**2 + l * math.sin(q1 + q3) * math.cos(q1) + q2 * math.sin(q1)**2 - l * math.cos(q1 + q3) * math.sin(q1)) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1)**2)) * dtheta
 
-    return dq1, dq2, dq3
+    return round(dq1, 5), round(dq2, 5), round(dq3, 5)
 
 #############################################################################
 # MAIN
@@ -373,8 +373,8 @@ if __name__ == "__main__":
     print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", q3_minus, "]\n") 
 
     dq1 = 0
-    dq2 = 1
-    dq3 = 0
+    dq2 = 0
+    dq3 = 2
     print("Configuration : dq = [", dq1, ",", dq2, ",", dq3, "]")
 
     dq = [dq1, dq2, dq3]
