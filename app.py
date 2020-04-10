@@ -318,46 +318,46 @@ def mdi(q, dx, dy, dtheta):
 # MAIN
 #############################################################################
 if __name__ == "__main__":
-    # A = (0, 0)
-    # B = (0, 10)
-    # C = (0, 14)
-    # V1 = 2
-    # V2 = 1
-    # Vmax = 2
-    # Amax = 1
+    A = (0, 0)
+    B = (0, 10)
+    C = (0, 14)
+    V1 = 2
+    V2 = 1
+    Vmax = 2
+    Amax = 1
     
-    # AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
-    # BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
-    # ti = getTime(V1, V2, AB, BC, Amax)
-    # (t0, t1, t2, t3, t4, t5) = ti
-    # T = np.arange(0., t5, 1/1000)
+    AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
+    BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
+    ti = getTime(V1, V2, AB, BC, Amax)
+    (t0, t1, t2, t3, t4, t5) = ti
+    T = np.arange(0., t5, 1/1000)
 
-    # print("AB :", AB)
-    # print("BC :", BC)
-    # print("ti :", t0, t1, t2, t3, t4, t5)
+    print("AB :", AB)
+    print("BC :", BC)
+    print("ti :", t0, t1, t2, t3, t4, t5)
    
-    # s, ds, dds, time = sampling(0., t5, 1., ti, Amax, V1, V2)
+    s, ds, dds, time = sampling(0., t5, 1., ti, Amax, V1, V2)
    
-    # ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
+    ac.affiche3courbes(1, "s", s, ds, dds, time, [t0, t1, t2, t3, t4, t5])
     
-    # (S, dS, ddS, X, dX, ddX, Y, dY, ddY) = trajrecouvre(A, B, C, V1, V2, Vmax, Amax)
+    (S, dS, ddS, X, dX, ddX, Y, dY, ddY) = trajrecouvre(A, B, C, V1, V2, Vmax, Amax)
     
-    # affichageTrajOp(S, X, dX, ddX, 'x')
-    # affichageTrajOp(S, Y, dY, ddY, 'y')
-    # ac.affiche3courbes(2, "x", X, dX, ddX, T, [t0, t1, t2, t3, t4, t5])
-    # ac.affiche3courbes(2, "y", Y, dY, ddY, T, [t0, t1, t2, t3, t4, t5])
+    affichageTrajOp(S, X, dX, ddX, 'x')
+    affichageTrajOp(S, Y, dY, ddY, 'y')
+    ac.affiche3courbes(2, "x", X, dX, ddX, T, [t0, t1, t2, t3, t4, t5])
+    ac.affiche3courbes(2, "y", Y, dY, ddY, T, [t0, t1, t2, t3, t4, t5])
 
-    # # vitesse point O4, pour faire une vérification
-    # vitO4 = []
-    # for i in range(len(dX)):
-    #     vit = math.sqrt(dX[i]**2 + dY[i]*2)
-    #     vitO4.append(vit)
+    # vitesse point O4, pour faire une vérification
+    vitO4 = []
+    for i in range(len(dX)):
+        vit = math.sqrt(dX[i]**2 + dY[i]*2)
+        vitO4.append(vit)
     
-    # plt.figure()
-    # plt.plot(T, vitO4)
-    # plt.show()
+    plt.figure()
+    plt.plot(T, vitO4)
+    plt.show()
 
-    #### MODELISATION DU ROBOT
+    ### MODELISATION DU ROBOT
     q1 = 0
     q2 = 2
     q3 = math.pi / 2
