@@ -254,6 +254,22 @@ def mdd(q, dq):
 
     return dx, dy, dtheta
 
+def mdi(q, dx, dy, dtheta):
+    (q1, q2, q3) = q
+    l = 1
+
+    dq1 = (-math.cos(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dx + \
+            (-math.sin(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dy + \
+            ((l * math.cos(q1 + q3) * math.sin(q1) - l * math.sin(q1 + q3) * math.cos(q1)) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dtheta
+    dq2 = (-math.sin(q2) / (math.cos(q1)**2 + math.sin(q1) * math.sin(q2))) * dx + \
+            (math.cos(q1) / (math.cos(q1)**2 + math.sin(q1) * math.sin(q2))) * dy + \
+            (-(l * math.cos(q1 + q3) * math.cos(q1) + l * math.sin(q1 + q3) * math.sin(q2)) / (math.cos(q1)**2 + math.sin(q1) * math.sin(q2))) * dtheta
+    dq3 = (math.cos(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dx + \
+            (math.sin(q1) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dy + \
+            ((q2 * math.cos(q1)**2 + l * math.sin(q1 + q3) * math.cos(q1) - l * math.cos(q1 + q3) * math.sin(q1) + q2 * math.sin(q1) * math.sin(q2)) / (q2 * math.cos(q1)**2 + q2 * math.sin(q1) * math.sin(q2))) * dtheta
+
+    return dq1, dq2, dq3
+
 #############################################################################
 # MAIN
 #############################################################################
@@ -309,15 +325,16 @@ if __name__ == "__main__":
     (q1_plus, q1_minus), (q2_plus, q2_minus), (q3_plus, q3_minus) = mgi(x, y, theta)
     print("MGI ==> 2 solutions : ")
     print("  - epsilon = +1 : q = [", q1_plus, ",", q2_plus, ",", q3_plus, "]")
-    print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", q3_minus, "]") 
+    print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", q3_minus, "]\n") 
 
     dq1 = 1
     dq2 = 0
     dq3 = 0
+    print("Configuration : dq = [", dq1, ",", dq2, ",", dq3, "]")
+
     dq = [dq1, dq2, dq3]
     dx, dy, dtheta = mdd(q, dq)
     print("MDD ==> dX = [", dx, ",", dy, ",", dtheta, "]")
 
-
-
-    
+    dq1, dq2, dq3 = mdi(q, dx, dy, dtheta)
+    print("MDI ==> dq = [", dq1, ",", dq2, ",", dq3, "]")
