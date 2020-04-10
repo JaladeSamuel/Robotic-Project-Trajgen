@@ -1,8 +1,17 @@
+#File : app.py
+#Written by : Aurelien Montmejat, Samuel Jalade, Thomas Lorigny
+#Git : https://github.com/JaladeSamuel/Robotic-Project-Trajgen
+
 import afficheCourbesTP as ac
 import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+#getTime
+#INPUT:
+#    V1, V2, AB, BC, Amax: Vitesse 1, vitesse 2, segment AB, segment BC
+#OUTPUT:
+#    [t0, t1, t2, t3, t4, t5]: temps de commutation
 def getTime(V1, V2, AB, BC, Amax):
     t0 = 0
     
@@ -27,6 +36,11 @@ def getTime(V1, V2, AB, BC, Amax):
 
     return [t0, t1, t2, t3, t4, t5]
 
+#loi_de_mouvement_dS
+#INPUT:
+#    t, ti, Amax, V1, V2: instant t, temps de commutation, Acceleration max, vitesse 1, vitesse 2
+#OUTPUT:
+#    a: evolution de l'acceleration
 def loi_de_mouvement_ddS(t, ti, Amax):
     (_, t1, t2, t3, t4, t5) = ti
     a = 0
@@ -40,6 +54,11 @@ def loi_de_mouvement_ddS(t, ti, Amax):
     
     return a
 
+#loi_de_mouvement_dS
+#INPUT:
+#    t, ti, Amax, V1, V2: instant t, temps de commutation, Acceleration max, vitesse 1, vitesse 2
+#OUTPUT:
+#    v: evolution de la vitesse
 def loi_de_mouvement_dS(t, ti, Amax, V1, V2):
     (_, t1, t2, t3, t4, t5) = ti
     v = 0
@@ -59,36 +78,21 @@ def loi_de_mouvement_dS(t, ti, Amax, V1, V2):
 
 #loi_de_mouvement_S
 #INPUT:
-#    t: temps
+#    t, ti, Amax, V1, V2: instant t, temps de commutation, Acceleration max, vitesse 1, vitesse 2
 #OUTPUT:
-#    x: position
+#    integral: evolution de la postion
 def loi_de_mouvement_S(t, ti, Amax, V1, V2):
-    # TODO : préciser dans le compte rendu ce qu'on a pas réussi 
-    # x = -1
-    # if t >= t0 and t < t1:
-    #     x =  1/2 * loi_de_mouvement_dS(t) * t #Amax * t = ds(t)
-    # elif t >= t1 and t < t2:
-    #     x = V1 * t
-    # elif t >= t2 and t < t3:
-    #     x = -1/2 * loi_de_mouvement_dS(t) * t #-Amax * t = ds(t)
-    # elif t >= t3 and t < t4:
-    #     x = V2 * t
-    # elif t >= t4 and t < t5:
-    #     x = -1/2 *loi_de_mouvement_dS(t) #-Amax * t = ds(t)
-    # return x
-    
-    # TODO : utiliser cumsum pour aller plus vite 
     integral = 0
     for i in  np.arange(0., t, 0.1):
         integral = integral + (loi_de_mouvement_dS(i, ti, Amax, V1, V2) * 0.1)
     
     return integral
 
-#Echantillonnage 
-# INPUT : 
-#   ts : t départ
-#   tf : t final
-#   te : Periode d'echantillonnage en ms
+#sampling
+#INPUT:
+#    ts, tf, te, ti, Amax, V1, V2: temps de depart, temps final, periode d'echantillonage, temps de commutation, Acceleration max, vitesse 1, vitesse 2
+#OUTPUT:
+#    s, ds, dds, time: loi de mouvement et temps echantillonne 
 def sampling(ts, tf, te, ti, Amax, V1, V2):
     s = []
     ds = []
@@ -103,6 +107,11 @@ def sampling(ts, tf, te, ti, Amax, V1, V2):
     
     return s, ds, dds, time
 
+#trajectoire
+#INPUT:
+#    A, B, C, s, t, ti: Point A, point B, point C, loi de mouvement, instant t, temps de commutation
+#OUTPUT:
+#    x, y: coordonnees des points du segment 
 def trajectoire(A, B, C, s, t, ti):
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
@@ -117,6 +126,11 @@ def trajectoire(A, B, C, s, t, ti):
 
     return (x, y)
 
+#trajectoire
+#INPUT:
+#    A, B, C, s, t, ti: Point A, point B, point C, loi de mouvement, instant t, temps de commutation
+#OUTPUT:
+#    x, y: coordonnees des points du segment vitesse
 def d_trajectoire(A, B, C, s, t, ti):
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
@@ -131,6 +145,11 @@ def d_trajectoire(A, B, C, s, t, ti):
 
     return (x, y)
 
+#Trajrecouvre
+# INPUT : 
+#    S, X, dX, ddX, label : loi de mouvement, position, vitesse, acceleration, label
+# OUTPUT : 
+#    Affichage de la trajectoire dans l'esapce operationnel
 def affichageTrajOp(S, X, dX, ddX, label = 'x'):
     plt.figure()
     
@@ -151,6 +170,11 @@ def affichageTrajOp(S, X, dX, ddX, label = 'x'):
     
     plt.show()
 
+#Trajrecouvre
+# INPUT : 
+#    A, B, C, V1, V2, Vmax, Amax : Coordonnees des points, vitesses desiree, vitesse et acceleration maximum
+# OUTPUT : 
+#    S, dS, ddS, X, dX, ddX, Y, dY, ddY : Mouvement operationnel en position vitesse et acceleration
 def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
     AB = math.sqrt((A[0] - B[0])**2 + (A[1] - B[1])**2)
     BC = math.sqrt((B[0] - C[0])**2 + (B[1] - C[1])**2)
@@ -191,6 +215,11 @@ def trajrecouvre(A, B, C, V1, V2, Vmax, Amax):
     
     return (S, dS, ddS, X, dX, ddX, Y, dY, ddY)
 
+#Modele geometrique direct 
+# INPUT : 
+#    q : q1, q2, q3
+# OUTPUT : 
+#    x, y, theta : position orientation
 def mgd(q):
     (q1, q2, q3) = q
     l = 1
@@ -205,6 +234,11 @@ def mgd(q):
 
     return round(x, 5), round(y, 5), round(theta, 5)
 
+#Modele geometrique inverse 
+# INPUT : 
+#    x, y, theta : position orientation
+# OUTPUT : 
+#    qi_minus, qi_plus: position des articulations, deux solutions par qi
 def mgi(x, y, theta):
     epsilon = 1
     l = 1
@@ -243,6 +277,11 @@ def mgi(x, y, theta):
 
     return (round(q1_plus, 5), round(q1_minus, 5)), (round(q2_plus, 5), round(q2_minus, 5)), (round(q3_plus, 5), round(q3_minus, 5))
 
+#Modele dynamique direct
+# INPUT : 
+#    q, dq: position orientation et différentielle articulaire dq
+# OUTPUT : 
+#    dx, dy, dtheta: différentielle  des  coordonnées opérationnelles 
 def mdd(q, dq):
     (q1, q2, q3) = q
     (dq1, dq2, dq3) = dq
@@ -254,6 +293,11 @@ def mdd(q, dq):
 
     return dx, dy, dtheta
 
+#Modele dynamique inverse
+# INPUT : 
+#    q, dx, dy, dtheta : configuration q et vitesse
+# OUTPUT : 
+#    dq1, dq2, dq3: vitesse articulaire dans l'espace opérationel
 def mdi(q, dx, dy, dtheta):
     (q1, q2, q3) = q
     l = 1
@@ -313,6 +357,7 @@ if __name__ == "__main__":
     # plt.plot(T, vitO4)
     # plt.show()
 
+    #### MODELISATION DU ROBOT
     q1 = 0
     q2 = 2
     q3 = math.pi / 2
