@@ -372,8 +372,8 @@ if __name__ == "__main__":
     print("  - epsilon = +1 : q = [", q1_plus, ",", q2_plus, ",", q3_plus, "]")
     print("  - epsilon = -1 : q = [", q1_minus, ",", q2_minus, ",", q3_minus, "]\n") 
 
-    dq1 = 0
-    dq2 = 1
+    dq1 = 1
+    dq2 = 0
     dq3 = 0
     print("Configuration : dq = [", dq1, ",", dq2, ",", dq3, "]")
 
