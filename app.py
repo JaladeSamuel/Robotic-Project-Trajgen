@@ -249,7 +249,7 @@ def mdd(q, dq):
     l = 1
 
     dx = (-l * math.sin(q1 + q3) - q2) * dq1 - math.sin(dq2) + (-l * math.sin(q1 + q3)) * dq3
-    dy = (l * math.cos(q1 + q3) - q2 * math.sin(q2)) * dq1 + math.cos(q1) * dq2 + (l * math.cos(q1 +q3)) * dq3
+    dy = (l * math.cos(q1 + q3) - q2 * math.sin(q1)) * dq1 + math.cos(q1) * dq2 + (l * math.cos(q1 +q3)) * dq3
     dtheta = dq1 + dq3
 
     return dx, dy, dtheta
